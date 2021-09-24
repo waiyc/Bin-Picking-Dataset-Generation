@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/waiyc/bin-picking-dataset-generation/badge)](https://www.codefactor.io/repository/github/waiyc/bin-picking-dataset-generation)
+
 # Bin Picking Dataset Generation Environment
 The scripts uses Pybullet and Open3D to create virtual clutter bin scenario dataset (rbg, depth, segmentation, point cloud) for AI training  
 
