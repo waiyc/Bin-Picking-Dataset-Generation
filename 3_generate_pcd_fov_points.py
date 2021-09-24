@@ -79,7 +79,7 @@ def fpcc_save_h5(h5_filename, data,  data_dtype='float32', label_dtype='uint8'):
 
 
 def samples(data, sample_num_point, dim=None):
-    if dim == None:
+    if dim is None:
         dim = data.shape[-1]
     N = data.shape[0]
     order = np.arange(N)

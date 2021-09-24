@@ -11,7 +11,7 @@ import json
 f = open('data_generation_setting.json')
 json_setting = json.load(f)
 
-'''pybullet env parameters'''
+# '''pybullet env parameters'''
 useGUI = True
 useRealTimeSimulation = 1 # 0 will freeze the simualtion?
 TIMESTEP_ = 1. / 240. # Time in seconds.
@@ -21,7 +21,7 @@ if useGUI:
 else:
   p.connect(p.DIRECT)
 
-''' virtual camera parameter in pybullet''' 
+# ''' virtual camera parameter in pybullet''' 
 CAMERA_IMG_WIDTH_       = 512 #px
 CAMERA_IMG_HEIGHT_      = 512 #px
 
@@ -39,13 +39,13 @@ CAMERA_VIEW_MATRIX_ = p.computeViewMatrix(cameraEyePosition=CAMERA_EYE_POSITION_
 CAMERA_PROJ_MATRIX_ = p.computeProjectionMatrixFOV(CAMERA_FOV_, CAMERA_ASPECT_, CAMERA_NEAR_, CAMERA_FAR_)
 
 
-'''Box/Container parameters'''
+# '''Box/Container parameters'''
 BOX_MODEL_PATH_ = "model/tote_box/tote_box.urdf"
 BOX_WIDTH_X_    = 0.6 #meters
 BOX_WIDTH_Y_    = 0.4
 BOX_SCALING_    = 2.0 #adjust scaling factor if box is too small 
 
-''' Dropping parameters'''
+# ''' Dropping parameters'''
 ITEM_MODEL_PATH_  = "model/IPAGearShaft/IPAGearShaft.urdf"
 DROP_X_MIN_       = -(BOX_WIDTH_X_ * BOX_SCALING_ * 0.6) / 2.0 # box width * box scaling* limit range scaling (to prevent drop at the edge of the box) / half
 DROP_X_MAX_       =  (BOX_WIDTH_X_ * BOX_SCALING_ * 0.6) / 2.0
@@ -54,12 +54,12 @@ DROP_Y_MAX_       =  (BOX_WIDTH_Y_ * BOX_SCALING_ * 0.6) / 2.0
 DROP_Z_MIN_       = 1.0
 DROP_Z_MAX_       = 1.5
 
-''' data collection cycle and drop setting '''
+# ''' data collection cycle and drop setting '''
 START_CYCLE_                  = json_setting["data_generation"]["start_cycle"]# starting count of cycle to run
 MAX_CYCLE_                    = json_setting["data_generation"]["end_cycle"]  # maximum count of cycle to run
 MAX_DROP_                     = json_setting["data_generation"]["max_drop"]   # max number of item drop in each cycle 
 
-'''path for save img data'''
+# '''path for save img data'''
 DATASET_FOLDER_NAME_          = json_setting["folder_struct"]["dataset_folder_name"]
 ITEM_NAME_                    = json_setting["folder_struct"]["item_name"] 
 TRAIN_TEST_FOLDER_NAME_       = json_setting["folder_struct"]["train_test_folder_name"] 
@@ -129,17 +129,17 @@ for cycle_idx in range(START_CYCLE_,MAX_CYCLE_+1):
     os.makedirs(os.path.join(cycle_gt_matrix_path))
 
   for item_count in range(1,MAX_DROP_+1):
-    '''reset the environemnt'''
+    # '''reset the environemnt'''
     setup_env() 
     
-    '''place a box at the middle''' 
+    # '''place a box at the middle''' 
     boxStartPos = [0, 0, 0.01]
     boxStartOrientation = p.getQuaternionFromEuler([1.571, 0, 0])
     boxId = p.loadURDF(BOX_MODEL_PATH_, boxStartPos, boxStartOrientation,useFixedBase=1,globalScaling=BOX_SCALING_)
     boxPos, boxQuat = p.getBasePositionAndOrientation(boxId)
     time.sleep(0.1)
     
-    '''start the dropping loop'''
+    # '''start the dropping loop'''
     obj_id = []
     count = 0
     for count in range(1,item_count+1):
@@ -169,7 +169,7 @@ for cycle_idx in range(START_CYCLE_,MAX_CYCLE_+1):
     print('End of cycle %04d_%03d'%(cycle_idx,item_count))
     print("Total item drop:" + str(len(obj_id)))
     
-    '''give it some time (3sec) to let the physics settle down'''
+    # '''give it some time (3sec) to let the physics settle down'''
     time_start = time.time()
     while time.time() < (time_start+3.0):
       images = p.getCameraImage(CAMERA_IMG_WIDTH_,
@@ -186,21 +186,21 @@ for cycle_idx in range(START_CYCLE_,MAX_CYCLE_+1):
       else:
         p.stepSimulation()
 
-    ''' end of this dropping cycle, start of data saving process '''
-    ''' image convertion '''
+    # ''' end of this dropping cycle, start of data saving process '''
+    # ''' image convertion '''
     rgb_opengl = np.reshape(images[2], (CAMERA_IMG_HEIGHT_, CAMERA_IMG_WIDTH_, 4)) * 1. / 255.
     depth_buffer_opengl = np.reshape(images[3], [CAMERA_IMG_WIDTH_, CAMERA_IMG_HEIGHT_])
     depth_opengl = CAMERA_FAR_ * CAMERA_NEAR_ / (CAMERA_FAR_ - (CAMERA_FAR_ - CAMERA_NEAR_) * depth_buffer_opengl)
     seg_opengl = np.reshape(images[4], [CAMERA_IMG_WIDTH_, CAMERA_IMG_HEIGHT_]) * 1. / 255.
     
-    ''' save rgb,depth,seg images '''
+    # ''' save rgb,depth,seg images '''
     mp.imsave(os.path.join(cycle_rgb_path ,   str('%03d_rgb.png'%item_count)), rgb_opengl)
     mp.imsave(os.path.join(cycle_depth_path , str('%03d_depth.png'%item_count)), depth_opengl)
     mp.imsave(os.path.join(cycle_seg_path ,   str('%03d_segmentation.png'%item_count)), seg_opengl)
 
-    ''' save each cycle with different number of object poses (target object only, without bin pose) into .txt '''
-    ''' format : x y z quat_x quat_y quat_z quat_w'''
-    ''' format : matrix 4x4 '''
+    # ''' save each cycle with different number of object poses (target object only, without bin pose) into .txt '''
+    # ''' format : x y z quat_x quat_y quat_z quat_w'''
+    # ''' format : matrix 4x4 '''
 
     gt_filename = str('%03d'%item_count)+'.txt'
     gt_poses_str = ''
