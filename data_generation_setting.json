@@ -1,0 +1,25 @@
+{
+    "data_generation": {
+        "start_cycle": 1,
+        "end_cycle": 50,
+        "max_drop": 30
+    },
+    "folder_struct": {
+        "dataset_folder_name": "data",
+        "model_folder_name": "model",
+        "item_name": "IPAGearShaft",
+        "train_test_folder_name": "training",
+        "rgb_img_folder_name": "p_rgb",
+        "depth_img_folder_name": "p_depth",
+        "syn_seg_img_folder_name": "p_segmentation",
+        "gt_poses_folder_name": "gt",
+        "gt_matrix_poses_folder_name": "gt_matrix",
+        "scene_folder_name": "scene",
+        "cropped_scene_folder_name": "pointcloud",
+        "h5_folder_name": "h5"
+    },
+    "model_param": {
+        "model_filename": "IPAGearShaft.stl",
+        "max_d": 0.436
+    }
+}
