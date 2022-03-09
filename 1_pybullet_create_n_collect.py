@@ -189,9 +189,9 @@ for cycle_idx in range(START_CYCLE_,MAX_CYCLE_+1):
     # ''' end of this dropping cycle, start of data saving process '''
     # ''' image convertion '''
     rgb_opengl = np.reshape(images[2], (CAMERA_IMG_HEIGHT_, CAMERA_IMG_WIDTH_, 4)) * 1. / 255.
-    depth_buffer_opengl = np.reshape(images[3], [CAMERA_IMG_WIDTH_, CAMERA_IMG_HEIGHT_])
+    depth_buffer_opengl = np.reshape(images[3], [CAMERA_IMG_HEIGHT_, CAMERA_IMG_WIDTH_])
     depth_opengl = CAMERA_FAR_ * CAMERA_NEAR_ / (CAMERA_FAR_ - (CAMERA_FAR_ - CAMERA_NEAR_) * depth_buffer_opengl)
-    seg_opengl = np.reshape(images[4], [CAMERA_IMG_WIDTH_, CAMERA_IMG_HEIGHT_]) * 1. / 255.
+    seg_opengl = np.reshape(images[4], [CAMERA_IMG_HEIGHT_,CAMERA_IMG_WIDTH_]) * 1. / 255.
     
     # ''' save rgb,depth,seg images '''
     mp.imsave(os.path.join(cycle_rgb_path ,   str('%03d_rgb.png'%item_count)), rgb_opengl)
