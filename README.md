@@ -59,3 +59,5 @@ Thanks for [YaJun](https://github.com/xyjbaal) for providing the initial code fo
 The Gear and Ring model included in this repo is from IPA Dataset [learn more](https://www.bin-picking.ai/)
 
 The dataset is generate and recorded base on the steps mentioned in IPA Dataset.
+
+[![HitCount](https://hits.dwyl.com/waiyc/Bin-Picking-Dataset-Generation.svg?style=flat-square)](http://hits.dwyl.com/waiyc/Bin-Picking-Dataset-Generation)
